@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenPulse - Tree Cover Analysis & GDI Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-leaf"></i>
+                <span>GreenPulse</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#predictions" class="nav-link">Predictions</a></li>
+                <li><a href="#visualizations" class="nav-link">Visualizations</a></li>
+                <li><a href="#analytics" class="nav-link">Analytics</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Green Deficit Index (GDI) Prediction System</h1>
+            <p class="hero-subtitle">Analyze tree cover loss, predict environmental impact, and monitor forest health across India</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <i class="fas fa-tree"></i>
+                    <div class="stat-info">
+                        <h3>5,616</h3>
+                        <p>Regions Analyzed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-info">
+                        <h3>2001-2023</h3>
+                        <p>Data Coverage</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <h3>99.9%</h3>
+                        <p>Model Accuracy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+        <div class="container">
+            <h2 class="section-title">Dashboard Overview</h2>
+            <div class="dashboard-grid">
+                <!-- Key Metrics Cards -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Tree Cover Extent 2000</h3>
+                    </div>
+                    <div class="metric-value">2.07M ha</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Baseline</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-chart-area"></i>
+                        <h3>Tree Cover Extent 2010</h3>
+                    </div>
+                    <div class="metric-value">1.94M ha</div>
+                    <div class="metric-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-6.2% from 2000</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-fire"></i>
+                        <h3>Total Tree Cover Loss</h3>
+                    </div>
+                    <div class="metric-value">4,391 ha</div>
+                    <div class="metric-change negative">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>2001-2023</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Tree Cover Gain</h3>
+                    </div>
+                    <div class="metric-value">5,361 ha</div>
+                    <div class="metric-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2000-2020</span>
+                    </div>
+                </div>
+
+                <!-- Main Chart -->
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Annual Tree Cover Loss Trend (2001-2023)</h3>
+                        <div class="chart-controls">
+                            <button class="btn-icon active" data-view="line"><i class="fas fa-chart-line"></i></button>
+                            <button class="btn-icon" data-view="bar"><i class="fas fa-chart-bar"></i></button>
+                        </div>
+                    </div>
+                    <canvas id="annualLossChart"></canvas>
+                </div>
+
+                <!-- GDI Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>GDI Category Distribution</h3>
+                    </div>
+                    <canvas id="gdiDistributionChart"></canvas>
+                </div>
+
+                <!-- Regional Analysis -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Top 10 Regions by Tree Cover Loss</h3>
+                    </div>
+                    <canvas id="regionalLossChart"></canvas>
+                </div>
+
+                <!-- Model Performance -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Model Performance Comparison</h3>
+                    </div>
+                    <canvas id="modelPerformanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Predictions Section -->
+    <section id="predictions" class="section">
+        <div class="container">
+            <h2 class="section-title">GDI Prediction</h2>
+            <div class="prediction-container">
+                <div class="prediction-form-card">
+                    <h3>Input Parameters</h3>
+                    <form id="predictionForm" class="prediction-form">
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select id="country" name="country" required>
+                                <option value="India">India</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="subnational1">Subnational Level 1</label>
+                                <select id="subnational1" name="subnational1" required>
+                                    <option value="">Select State</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subnational2">Subnational Level 2</label>
+                                <input type="text" id="subnational2" name="subnational2" placeholder="District">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="threshold">Threshold (%)</label>
+                                <input type="number" id="threshold" name="threshold" min="0" max="75" value="25" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="area_ha">Area (hectares)</label>
+                                <input type="number" id="area_ha" name="area_ha" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="extent_2000_ha">Extent 2000 (ha)</label>
+                                <input type="number" id="extent_2000_ha" name="extent_2000_ha" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="extent_2010_ha">Extent 2010 (ha)</label>
+                                <input type="number" id="extent_2010_ha" name="extent_2010_ha" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gain_2000_2020_ha">Gain 2000-2020 (ha)</label>
+                                <input type="number" id="gain_2000_2020_ha" name="gain_2000_2020_ha" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="total_loss">Total Loss 2001-2023 (ha)</label>
+                                <input type="number" id="total_loss" name="total_loss" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-calculator"></i>
+                            Predict GDI
+                        </button>
+                    </form>
+                </div>
+
+                <div class="prediction-result-card">
+                    <h3>Prediction Results</h3>
+                    <div id="predictionResults" class="prediction-results">
+                        <div class="result-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Enter parameters and click "Predict GDI" to see results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualizations Section -->
+    <section id="visualizations" class="section">
+        <div class="container">
+            <h2 class="section-title">Data Visualizations</h2>
+            <div class="visualization-grid">
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Tree Cover Extent: 2000 vs 2010</h3>
+                    </div>
+                    <canvas id="extentComparisonChart"></canvas>
+                </div>
+
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Tree Cover Gain vs Total Loss</h3>
+                    </div>
+                    <canvas id="gainLossChart"></canvas>
+                </div>
+
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Correlation Heatmap</h3>
+                    </div>
+                    <canvas id="correlationChart"></canvas>
+                </div>
+
+                <div class="chart-card large">
+                    <div class="chart-header">
+                        <h3>Predicted vs Actual GDI</h3>
+                    </div>
+                    <canvas id="predictedActualChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="section">
+        <div class="container">
+            <h2 class="section-title">Model Analytics</h2>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Model Evaluation Metrics</h3>
+                    <div class="metrics-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>MAE</th>
+                                    <th>RMSE</th>
+                                    <th>R² Score</th>
+                                    <th>CV Mean R²</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Linear Regression</strong></td>
+                                    <td>3.03e-13</td>
+                                    <td>6.20e-13</td>
+                                    <td>1.0000</td>
+                                    <td>1.0000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Decision Tree</strong></td>
+                                    <td>1.24</td>
+                                    <td>4.44</td>
+                                    <td>0.9996</td>
+                                    <td>0.9923</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Feature Importance</h3>
+                    <div class="feature-importance">
+                        <div class="feature-item">
+                            <span class="feature-name">Extent 2000</span>
+                            <div class="feature-bar">
+                                <div class="feature-fill" style="width: 95%"></div>
+                            </div>
+                            <span class="feature-value">95%</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-name">Extent 2010</span>
+                            <div class="feature-bar">
+                                <div class="feature-fill" style="width: 92%"></div>
+                            </div>
+                            <span class="feature-value">92%</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-name">Total Loss</span>
+                            <div class="feature-bar">
+                                <div class="feature-fill" style="width: 78%"></div>
+                            </div>
+                            <span class="feature-value">78%</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-name">Gain 2000-2020</span>
+                            <div class="feature-bar">
+                                <div class="feature-fill" style="width: 65%"></div>
+                            </div>
+                            <span class="feature-value">65%</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-name">Area</span>
+                            <div class="feature-bar">
+                                <div class="feature-fill" style="width: 45%"></div>
+                            </div>
+                            <span class="feature-value">45%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-leaf"></i> GreenPulse</h4>
+                    <p>Advanced tree cover analysis and GDI prediction system for environmental monitoring.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#predictions">Predictions</a></li>
+                        <li><a href="#visualizations">Visualizations</a></li>
+                        <li><a href="#analytics">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Data Sources</h4>
+                    <ul>
+                        <li>Subnational 1 Tree Cover Loss</li>
+                        <li>Subnational 2 Tree Cover Loss</li>
+                        <li>Global Forest Watch</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GreenPulse. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
